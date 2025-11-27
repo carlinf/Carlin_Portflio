@@ -1,6 +1,6 @@
-// ===================================
+// 
 // Mobile Menu Toggle
-// ===================================
+// 
 const hamburger = document.querySelector('.hamburger');
 const sidebar = document.querySelector('.sidebar');
 const backdrop = document.querySelector('.sidebar-backdrop');
@@ -47,9 +47,9 @@ if (hamburger && sidebar) {
     });
 }
 
-// ===================================
+// 
 // Active Navigation Link
-// ===================================
+//
 const sections = document.querySelectorAll('.section, .hero, .blog');
 const navLinks = document.querySelectorAll('.nav-link');
 
@@ -115,26 +115,29 @@ function type() {
 if (typingText) {
     type();
 }
-
-// ===================================
+//
 // Smooth Scrolling
-// ===================================
+//
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+        const href = this.getAttribute('href');
+        // Only handle anchor links (starting with #) and not external links
+        if (href && href.startsWith('#') && !this.hasAttribute('target')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         }
     });
 });
 
-// ===================================
+// 
 // Counter Animation
-// ===================================
+// 
 const animateCounter = (element) => {
     const target = parseInt(element.getAttribute('data-target'));
     const duration = 2000; // 2 seconds
@@ -169,9 +172,9 @@ statNumbers.forEach(stat => {
     counterObserver.observe(stat);
 });
 
-// ===================================
+// 
 // Skill Bar Animation
-// ===================================
+// 
 const skillBars = document.querySelectorAll('.skill-progress');
 const skillObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -240,6 +243,8 @@ const modalImage = document.getElementById('modalImage');
 const modalTitle = document.getElementById('modalTitle');
 const modalDescription = document.getElementById('modalDescription');
 const modalTechList = document.getElementById('modalTechList');
+const modalLink = document.getElementById('modalLink');
+const modalLinkContainer = document.getElementById('modalLinkContainer');
 
 // Open modal when portfolio item is clicked
 portfolioItems.forEach(item => {
@@ -248,6 +253,7 @@ portfolioItems.forEach(item => {
         const description = item.getAttribute('data-description');
         const technologies = item.getAttribute('data-technologies');
         const image = item.getAttribute('data-image');
+        const link = item.getAttribute('data-link');
         
         if (title && description && technologies && image) {
             // Set modal content
@@ -265,6 +271,16 @@ portfolioItems.forEach(item => {
                 tag.textContent = tech;
                 modalTechList.appendChild(tag);
             });
+            
+            // Handle website link
+            if (link) {
+                modalLink.href = link;
+                modalLink.target = '_blank';
+                modalLink.rel = 'noopener noreferrer';
+                modalLinkContainer.style.display = 'block';
+            } else {
+                modalLinkContainer.style.display = 'none';
+            }
             
             // Show modal
             portfolioModal.classList.add('active');
@@ -302,12 +318,62 @@ document.addEventListener('keydown', (e) => {
 // Sidebar is always fixed, no scroll effect needed
 
 // 
-// Contact Form Handling
+// Contact Form Handling with EmailJS
 // 
+// Initialize EmailJS when the library is loaded
+let emailjsInitialized = false;
+
+// Wait for EmailJS to load
+if (typeof emailjs !== 'undefined') {
+    emailjs.init("kx6xQGQiUAMDGczxx");
+    emailjsInitialized = true;
+} else {
+    // Wait for EmailJS to load
+    window.addEventListener('load', () => {
+        if (typeof emailjs !== 'undefined') {
+            emailjs.init("kx6xQGQiUAMDGczxx");
+            emailjsInitialized = true;
+        }
+    });
+}
+
 const contactForm = document.getElementById('contactForm');
+const formMessage = document.getElementById('formMessage');
+const submitBtn = document.getElementById('submitBtn');
+const btnText = submitBtn ? submitBtn.querySelector('.btn-text') : null;
+const btnLoader = submitBtn ? submitBtn.querySelector('.btn-loader') : null;
+
+// Function to show message
+function showMessage(text, type = 'success') {
+    if (formMessage) {
+        formMessage.textContent = text;
+        formMessage.className = `form-message ${type}`;
+        formMessage.style.display = 'block';
+        
+        // Hide message after 5 seconds
+        setTimeout(() => {
+            formMessage.style.display = 'none';
+        }, 5000);
+    }
+}
+
+// Function to set button loading state
+function setButtonLoading(loading) {
+    if (submitBtn && btnText && btnLoader) {
+        if (loading) {
+            submitBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'inline-block';
+        } else {
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline-block';
+            btnLoader.style.display = 'none';
+        }
+    }
+}
 
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         // Get form data
@@ -316,14 +382,83 @@ if (contactForm) {
         const email = formData.get('email');
         const message = formData.get('message');
 
-        // Simple validation
-        if (name && email && message) {
-            // Here you would typically send the data to a server
-            // For now, we'll just show an alert
-            alert('Thank you for your message! I will get back to you soon.');
+        // Validation
+        if (!name || !email || !message) {
+            showMessage('Please fill in all fields.', 'error');
+            return;
+        }
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showMessage('Please enter a valid email address.', 'error');
+            return;
+        }
+
+        // Set loading state
+        setButtonLoading(true);
+        formMessage.style.display = 'none';
+
+        // EmailJS configuration
+        // Replace these with your EmailJS service ID and template ID
+        // Get them from: https://dashboard.emailjs.com/admin
+        const serviceID = 'service_mdu2k0d'; // Replace with your EmailJS service ID
+        const templateID = 'template_qwzkv4l'; // Replace with your EmailJS template ID
+
+        // Prepare email parameters
+        const templateParams = {
+            from_name: name,
+            from_email: email,
+            to_email: email, // Sending to the email entered in the form
+            message: message,
+            reply_to: email
+        };
+
+        try {
+            // Check if EmailJS is loaded and initialized
+            if (typeof emailjs === 'undefined') {
+                throw new Error('EmailJS library not loaded. Please check your internet connection.');
+            }
+
+            if (!emailjsInitialized) {
+                emailjs.init("kx6xQGQiUAMDGczxx");
+                emailjsInitialized = true;
+            }
+
+            // Send email using EmailJS
+            const response = await emailjs.send(serviceID, templateID, templateParams);
+            
+            // Success
+            console.log('EmailJS Success:', response);
+            showMessage('Message sent successfully! I will get back to you soon.', 'success');
             contactForm.reset();
-        } else {
-            alert('Please fill in all fields.');
+        } catch (error) {
+            // Error handling with more details
+            console.error('EmailJS Error Details:', error);
+            
+            let errorMessage = 'Failed to send message. ';
+            
+            // Provide more specific error messages
+            if (error.status === 400) {
+                errorMessage += 'Invalid request. Please check your EmailJS template variables.';
+            } else if (error.status === 401) {
+                errorMessage += 'Unauthorized. Please check your EmailJS public key.';
+            } else if (error.status === 412) {
+                errorMessage += 'Gmail authentication issue. Please re-authenticate your Gmail service in EmailJS dashboard.';
+            } else if (error.status === 404) {
+                errorMessage += 'Service or template not found. Please check your Service ID and Template ID.';
+            } else if (error.text) {
+                errorMessage += error.text;
+            } else if (error.message) {
+                errorMessage += error.message;
+            } else {
+                errorMessage += 'Please verify your EmailJS configuration in the dashboard.';
+            }
+            
+            showMessage(errorMessage, 'error');
+        } finally {
+            // Reset loading state
+            setButtonLoading(false);
         }
     });
 }
@@ -347,6 +482,66 @@ revealElements.forEach(element => {
     element.style.transform = 'translateY(30px)';
     element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     revealObserver.observe(element);
+});
+
+// 
+// Blog Modal
+// 
+const blogModal = document.getElementById('blogModal');
+const blogModalClose = document.querySelector('.blog-modal-close');
+const blogModalTitle = document.getElementById('blogModalTitle');
+const blogModalContent = document.getElementById('blogModalContent');
+const blogModalLink = document.getElementById('blogModalLink');
+const blogCards = document.querySelectorAll('.blog-card');
+
+// Open blog modal when Read More button is clicked
+blogCards.forEach(card => {
+    const readMoreBtn = card.querySelector('.btn-read-more');
+    if (readMoreBtn) {
+        readMoreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const title = card.getAttribute('data-title');
+            const content = card.getAttribute('data-content');
+            const link = card.getAttribute('data-link');
+            
+            if (title && content && link) {
+                blogModalTitle.textContent = title;
+                blogModalContent.textContent = content;
+                blogModalLink.href = link;
+                blogModalLink.target = '_blank';
+                blogModalLink.rel = 'noopener noreferrer';
+                
+                blogModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        });
+    }
+});
+
+// Close blog modal
+function closeBlogModal() {
+    blogModal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+if (blogModalClose) {
+    blogModalClose.addEventListener('click', closeBlogModal);
+}
+
+// Close blog modal when clicking outside
+if (blogModal) {
+    blogModal.addEventListener('click', (e) => {
+        if (e.target === blogModal) {
+            closeBlogModal();
+        }
+    });
+}
+
+// Close blog modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && blogModal.classList.contains('active')) {
+        closeBlogModal();
+    }
 });
 
 // 

@@ -1,6 +1,4 @@
-/* ===================================
-   Reset & Base Styles
-   =================================== */
+
 * {
     margin: 0;
     padding: 0;
@@ -41,9 +39,9 @@ body {
     padding: 0 20px;
 }
 
-/* ===================================
+/* 
    Sidebar Navigation
-   =================================== */
+   */
 .sidebar {
     position: fixed;
     left: 0;
@@ -208,9 +206,9 @@ body {
     transition: opacity 0.3s ease;
 }
 
-/* ===================================
+/* 
    Hero Section
-   =================================== */
+   */
 .hero {
     min-height: 100vh;
     display: flex;
@@ -280,6 +278,8 @@ body {
     font-weight: 600;
     border: 2px solid transparent;
     cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .btn-primary {
@@ -325,9 +325,9 @@ body {
     60% { transform: translateX(-50%) translateY(-5px); }
 }
 
-/* ===================================
+/* 
    Section Styles
-   =================================== */
+    */
 .section {
     padding: 80px 0;
 }
@@ -637,18 +637,31 @@ body {
     margin-top: 40px;
 }
 
+.download-cv .btn,
+.about-info .btn {
+    width: auto;
+    display: inline-block;
+    max-width: fit-content;
+    align-self: flex-start;
+}
+
 /* ===================================
    Portfolio Section
    =================================== */
 .portfolio {
     background-color: var(--darker-bg);
+    padding: 60px 0;
+}
+
+.portfolio .container {
+    max-width: 1400px;
 }
 
 .portfolio-filters {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin-bottom: 50px;
+    margin-bottom: 35px;
     flex-wrap: wrap;
 }
 
@@ -672,8 +685,10 @@ body {
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .portfolio-item {
@@ -686,7 +701,8 @@ body {
 .portfolio-image {
     position: relative;
     overflow: hidden;
-    aspect-ratio: 4/3;
+    aspect-ratio: 16/10;
+    border-radius: 10px;
 }
 
 .portfolio-image img {
@@ -778,7 +794,8 @@ body {
     padding: 30px;
     transition: all 0.3s ease;
     border: 1px solid var(--border-color);
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
 }
 
 .blog-card:hover {
@@ -861,6 +878,120 @@ body {
 
 .blog-content li:last-child {
     margin-bottom: 0;
+}
+
+.btn-read-more {
+    margin-top: auto;
+    padding: 12px 30px;
+    background-color: var(--primary-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: fit-content;
+    align-self: flex-start;
+}
+
+.btn-read-more:hover {
+    background-color: #1ba87a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(32, 201, 151, 0.3);
+}
+
+/* ===================================
+   Blog Modal
+   =================================== */
+.blog-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease;
+}
+
+.blog-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.blog-modal-content {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.blog-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 35px;
+    font-weight: bold;
+    color: var(--text-primary);
+    cursor: pointer;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.blog-modal-close:hover {
+    background-color: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+.blog-modal-header {
+    padding: 40px 40px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.blog-modal-header h2 {
+    font-size: 28px;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.blog-modal-body {
+    padding: 30px 40px;
+}
+
+.blog-modal-body p {
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0;
+    white-space: pre-line;
+}
+
+.blog-modal-footer {
+    padding: 20px 40px 40px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.blog-modal-footer .btn {
+    display: inline-block;
 }
 
 /* ===================================
@@ -997,6 +1128,17 @@ body {
     background-color: var(--primary-color);
     color: var(--text-primary);
     transform: translateY(-2px);
+}
+
+.modal-link-container {
+    margin-top: 30px;
+    text-align: center;
+    padding-top: 25px;
+    border-top: 1px solid var(--border-color);
+}
+
+.modal-link-container .btn {
+    display: inline-block;
 }
 
 /* ===================================
@@ -1162,6 +1304,53 @@ body {
 .form-group textarea {
     resize: vertical;
     min-height: 120px;
+}
+
+.form-message {
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    animation: slideDown 0.3s ease;
+}
+
+.form-message.success {
+    background-color: rgba(32, 201, 151, 0.2);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.form-message.error {
+    background-color: rgba(239, 68, 68, 0.2);
+    border: 1px solid #ef4444;
+    color: #ef4444;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.btn-loader {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-loader i {
+    font-size: 14px;
 }
 
 /* ===================================
