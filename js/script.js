@@ -189,9 +189,9 @@ skillBars.forEach(bar => {
     skillObserver.observe(bar);
 });
 
-// ===================================
+// 
 // Portfolio Filter
-// ===================================
+// 
 const filterButtons = document.querySelectorAll('.filter-btn');
 const portfolioItems = document.querySelectorAll('.portfolio-item');
 
@@ -231,9 +231,9 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ===================================
+// 
 // Portfolio Modal
-// ===================================
+// 
 const portfolioModal = document.getElementById('portfolioModal');
 const modalClose = document.querySelector('.modal-close');
 const modalImage = document.getElementById('modalImage');
@@ -301,9 +301,9 @@ document.addEventListener('keydown', (e) => {
 
 // Sidebar is always fixed, no scroll effect needed
 
-// ===================================
+// 
 // Contact Form Handling
-// ===================================
+// 
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
@@ -328,9 +328,9 @@ if (contactForm) {
     });
 }
 
-// ===================================
+// 
 // Scroll Reveal Animation
-// ===================================
+// 
 const revealElements = document.querySelectorAll('.service-card, .resume-item, .testimonial-card, .portfolio-item');
 
 const revealObserver = new IntersectionObserver((entries) => {
@@ -349,9 +349,9 @@ revealElements.forEach(element => {
     revealObserver.observe(element);
 });
 
-// ===================================
+// 
 // Initialize on page load
-// ===================================
+// 
 document.addEventListener('DOMContentLoaded', () => {
     // Set initial active nav link
     if (window.location.hash) {
