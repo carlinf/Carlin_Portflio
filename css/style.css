@@ -204,6 +204,7 @@ body {
     z-index: 999;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 /* 
@@ -1208,12 +1209,16 @@ body {
    =================================== */
 .contact {
     background-color: var(--darker-bg);
+    position: relative;
+    z-index: 10;
 }
 
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     gap: 50px;
+    position: relative;
+    z-index: 10;
 }
 
 .contact-info h3 {
@@ -1271,6 +1276,11 @@ body {
     transform: translateY(-3px);
 }
 
+.contact-form {
+    position: relative;
+    z-index: 10;
+}
+
 .contact-form h3 {
     font-size: 24px;
     margin-bottom: 30px;
@@ -1292,6 +1302,11 @@ body {
     font-size: 15px;
     font-family: inherit;
     transition: all 0.3s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    touch-action: manipulation;
 }
 
 .form-group input:focus,
@@ -1409,6 +1424,7 @@ body {
 
     .sidebar-backdrop {
         display: block;
+        pointer-events: none;
     }
 
     .hamburger {
@@ -1511,6 +1527,40 @@ body {
 
     .modal-image-container img {
         max-height: 300px;
+    }
+
+    /* Form mobile fixes */
+    .contact-form {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+    }
+
+    .form-group {
+        position: relative;
+        z-index: 10;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 12px 15px;
+        min-height: 44px; /* Better touch target */
+        -webkit-tap-highlight-color: rgba(32, 201, 151, 0.2);
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+    }
+
+    .contact-content {
+        gap: 30px;
+    }
+
+    .contact-info,
+    .contact-form {
+        width: 100%;
+        max-width: 100%;
     }
 }
 

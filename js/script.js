@@ -13,8 +13,10 @@ function toggleSidebar() {
     if (backdrop) {
         if (isActive) {
             backdrop.style.opacity = '0';
+            backdrop.style.pointerEvents = 'none';
         } else {
             backdrop.style.opacity = '1';
+            backdrop.style.pointerEvents = 'auto';
         }
     }
 }
@@ -29,6 +31,7 @@ if (hamburger && sidebar) {
                 hamburger.classList.remove('active');
                 sidebar.classList.remove('active');
                 backdrop.style.opacity = '0';
+                backdrop.style.pointerEvents = 'none';
             }
         });
     }
@@ -41,6 +44,7 @@ if (hamburger && sidebar) {
                 sidebar.classList.remove('active');
                 if (backdrop) {
                     backdrop.style.opacity = '0';
+                    backdrop.style.pointerEvents = 'none';
                 }
             }
         });
@@ -400,8 +404,7 @@ if (contactForm) {
         formMessage.style.display = 'none';
 
         // EmailJS configuration
-        // Replace these with your EmailJS service ID and template ID
-        // Get them from: https://dashboard.emailjs.com/admin
+       
         const serviceID = 'service_mdu2k0d'; // Replace with your EmailJS service ID
         const templateID = 'template_qwzkv4l'; // Replace with your EmailJS template ID
 
